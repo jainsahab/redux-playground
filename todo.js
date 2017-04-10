@@ -1,4 +1,5 @@
 const createStore = require('redux').createStore;
+const combineReducers = require('redux').combineReducers;
 
 const initialState = {
     visibilityFilter: 'SHOW_ALL',
@@ -36,40 +37,34 @@ const markCompletedAtIndex = function (givenIndex) {
     }
 };
 
-const toDos = function (state = [], action) {
+const toDosReducer = function (state = [], action) {
     switch (action.type) {
         case 'ADD_TODO':
-            return Object.assign(
-                {},
-                state,
-                {
-                    todos: state.todos.concat([{text: action.text, completed: false}])
-                }
-            );
+            return state.concat([{text: action.text, completed: false}]);
         case 'DELETE_TODO':
-            return Object.assign(
-                {},
-                state,
-                {
-                    todos: state.todos.filter((elem, index) => action.index != index)
-                }
-            );
+            return state.filter((elem, index) => action.index != index);
         case 'MARK_AS_COMPLETED':
-            return Object.assign(
-                {},
-                state,
-                {
-                    todos: state.todos.map(markCompletedAtIndex(action.index))
-                }
-            );
-        case 'VISIBILITY_FILTER':
-            return Object.assign({}, state, { visibilityFilter: action.visibility });
+            return state.map(markCompletedAtIndex(action.index));
         default:
             return state;
     }
 };
 
-const toDoStore = createStore(toDos, initialState);
+const visibilityFilterReducer = function (state = "SHOW_ALL", action) {
+    switch (action.type) {
+        case 'VISIBILITY_FILTER':
+            return action.visibility;
+        default:
+            return state;
+    }
+};
+
+const reducerMap = {
+    visibilityFilter: visibilityFilterReducer,
+    todos: toDosReducer
+};
+
+const toDoStore = createStore(combineReducers(reducerMap), initialState);
 const toDoApp = {};
 const print = function (text) {
     console.log(text);
