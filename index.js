@@ -7,6 +7,8 @@ var executeCommand = function(command, arg) {
 		return toDoApp.addToDo(arg);
 	if(command == "del") 
 		return toDoApp.deleteToDo(parseInt(arg));
+	if(command == "comp") 
+		return toDoApp.markAsCompleted(parseInt(arg));
 	if(command == "ls") 
 		return toDoApp.listAll();
 }
