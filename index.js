@@ -9,7 +9,9 @@ var executeCommand = function(command, arg) {
 		return toDoApp.deleteToDo(parseInt(arg));
 	if(command == "comp") 
 		return toDoApp.markAsCompleted(parseInt(arg));
-	if(command == "ls") 
+	if(command == "vis")
+		return toDoApp.setVisibilityFilter(arg);
+	if(command == "ls")
 		return toDoApp.listAll();
 }
 
